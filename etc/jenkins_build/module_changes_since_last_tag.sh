@@ -21,7 +21,7 @@ else
     # if there's a build.sbt file, use its version string as the version of that module
     if [ -a "${mod}/build.sbt" ]; then
       SBT_FNAME="${mod}/build.sbt"
-      VERSION=$(cat ${SBT_FNAME} | grep "version" | grep -o -E "\d+\.\d+\.\d+")
+      VERSION=$(cat ${SBT_FNAME} | grep "version" | egrep -o "\d+\.\d+\.\d+")
 
       echo -e "\t->scala SBT file found (${SBT_FNAME}): version is ${VERSION}"
     else
@@ -30,7 +30,8 @@ else
       VERSION=${LAST_TAG}
     fi
 
-    # now set the environment variable ${mod} to be the version
+    # now echo the name of the module and its version into a temporary file in key=value
+    # syntax.  this file gets read in by jenkins at a later stage as environment variables.
     echo "$(echo $mod | sed -e 's/[-/]/\_/g')"="$VERSION" > modules.changed
   done
 fi

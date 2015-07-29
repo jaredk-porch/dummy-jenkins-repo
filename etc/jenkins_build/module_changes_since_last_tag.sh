@@ -31,6 +31,6 @@ else
     fi
 
     # now set the environment variable ${mod} to be the version
-    export "$(echo $mod | sed -e 's/[-/]/\_/g')"="$VERSION"
+    echo "export "$(echo $mod | sed -e 's/[-/]/\_/g')"="$VERSION""
   done
 fi

@@ -31,6 +31,6 @@ else
     fi
 
     # now set the environment variable ${mod} to be the version
-    echo "export "$(echo $mod | sed -e 's/[-/]/\_/g')"="$VERSION""
+    echo "$(echo $mod | sed -e 's/[-/]/\_/g')"="$VERSION" > modules.changed
   done
 fi

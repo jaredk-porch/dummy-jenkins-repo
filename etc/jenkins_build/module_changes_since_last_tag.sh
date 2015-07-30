@@ -21,7 +21,7 @@ else
     # if there's a build.sbt file, use its version string as the version of that module
     if [ -a "${mod}/build.sbt" ]; then
       SBT_FNAME="${mod}/build.sbt"
-      VERSION=$(cat ${SBT_FNAME} | grep "version" | egrep -o "\d+\.\d+\.\d+")
+      VERSION=$(cat ${SBT_FNAME} | grep "version" | grep -E -o "[0-9]+\.[0-9]+\.[0-9]+") # TODO: BSD vs GNU grep
 
       echo -e "\t->scala SBT file found (${SBT_FNAME}): version is ${VERSION}"
     else

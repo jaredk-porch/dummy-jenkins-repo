@@ -1,7 +1,12 @@
 #!/bin/bash
 
+if [ -z "${GIT_BRANCH}" ]; then
+  GIT_BRANCH=$(git branch | awk '{print $2}')
+  echo "GIT_BRANCH=${GIT_BRANCH}" > modules.changed
+fi
+
 # this is the last known tag, assuming semver tags.
-LAST_TAG=$(git tag -l | grep '^[0-9]\+\.[0-9]\+\.[0-9]\+$' | sort -t. -k1,1n -k2,2n -k3,3n | head -n 1)
+LAST_TAG=$(git tag -l | grep '^[0-9]\+\.[0-9]\+\.[0-9]\+$' | sort -t. -k1,1n -k2,2n -k3,3n | tail -n 1)
 
 # TODO: check - perhaps we never actually had a tag
 echo "last deployed tag was <${LAST_TAG}>"
@@ -21,7 +26,7 @@ else
     # if there's a build.sbt file, use its version string as the version of that module
     if [ -a "${mod}/build.sbt" ]; then
       SBT_FNAME="${mod}/build.sbt"
-      VERSION=$(cat ${SBT_FNAME} | grep "version" | grep -E -o "[0-9]+\.[0-9]+\.[0-9]+") # TODO: BSD vs GNU grep
+      VERSION=$(cat ${SBT_FNAME} | grep "version" | grep -E -o "[0-9]+\.[0-9]+\.[0-9]+")
 
       echo -e "\t->scala SBT file found (${SBT_FNAME}): version is ${VERSION}"
     else
